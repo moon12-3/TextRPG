@@ -27,6 +27,10 @@ enum JOB {
 	JOB_END
 };
 
+typedef struct {
+	int iGold;
+}tagInventory;
+
 #define NAME_SIZE	32
 
 typedef struct {
@@ -43,10 +47,12 @@ typedef struct {
 	int iMPMax;
 	int iExp;
 	int iLevel;
+	tagInventory	tInventory;
+
 }tagPlayer;
 
 typedef struct {
-	char	name[NAME_SIZE];
+	char	strName[NAME_SIZE];
 	int iAttackMin;
 	int iAttackMax;
 	int iArmorMin;
@@ -60,6 +66,8 @@ typedef struct {
 	int iGoldMin;
 	int iGoldMax;
 }tagMonster;
+
+
 
 int main() {
 	srand(time(NULL));
@@ -92,6 +100,7 @@ int main() {
 	tPlayer.eJob = (JOB)iJob;
 	tPlayer.iLevel = 1;
 	tPlayer.iExp = 0;
+	tPlayer.tInventory.iGold = 10000;
 
 	switch (tPlayer.eJob) {
 	case JOB_KNIGHT :
@@ -133,7 +142,7 @@ int main() {
 	tagMonster tMonsterArr[MT_BACK - 1] = {};
 
 	// 고블린
-	strcpy(tMonsterArr[0].name, "고블린");
+	strcpy(tMonsterArr[0].strName, "고블린");
 	tMonsterArr[0].iAttackMin = 20;
 	tMonsterArr[0].iAttackMax = 30;
 	tMonsterArr[0].iArmorMin = 2;
@@ -148,7 +157,7 @@ int main() {
 	tMonsterArr[0].iGoldMax = 1500;
 
 	// 트롤 생성
-	strcpy(tMonsterArr[0].name, "트롤");
+	strcpy(tMonsterArr[0].strName, "트롤");
 	tMonsterArr[1].iAttackMin = 80;
 	tMonsterArr[1].iAttackMax = 130;
 	tMonsterArr[1].iArmorMin = 60;
@@ -163,7 +172,7 @@ int main() {
 	tMonsterArr[1].iGoldMax = 8000;
 	
 	// 드래곤 생성
-	strcpy(tMonsterArr[0].name, "드래곤");
+	strcpy(tMonsterArr[0].strName, "드래곤");
 	tMonsterArr[0].iAttackMin = 250;
 	tMonsterArr[0].iAttackMax = 500;
 	tMonsterArr[0].iArmorMin = 200;
@@ -176,7 +185,6 @@ int main() {
 	tMonsterArr[0].iExp = 30000;
 	tMonsterArr[0].iGoldMin = 20000;
 	tMonsterArr[0].iGoldMax = 50000;
-
 
 	// 메인 로비
 	while (true) {
@@ -217,6 +225,43 @@ int main() {
 				}
 
 				if (iMenu == MT_BACK) break;
+
+				// 선택한 메뉴에서 1을 빼주면 몬스터 배열의 인덱스가 된다.
+
+				tagMonster tMonster = tMonsterArr[iMenu - 1];
+
+				while (true) {
+					switch (iMenu)
+					{
+					case MT_EASY:
+						cout << "******************* 쉬움 ************************" << endl;
+						break;
+					case MT_NORMAL:
+						cout << "******************* 보통 ************************" << endl;
+						break;
+					case MT_HARD:
+						cout << "******************* 어려움 ************************" << endl;
+						break;
+					}
+
+					cout << endl;
+
+					// 플레이어 정보 출력
+					cout << "======================= Player =========================" <<endl;
+					cout << "이름 : " << tPlayer.strName << "\t직업" << tPlayer.strJobName << tPlayer.strJobName << endl;
+					cout << "레벨 : " << tPlayer.iLevel << "\t경험치 : " << tPlayer.iExp<<endl;
+					cout << "공격력 : " << tPlayer.iAttackMin << " - " << tPlayer.iAttackMax << "\t방어력 : " << tPlayer.iArmorMin << " - " << tPlayer.iArmorMax<<endl;
+					cout << "체력 : " << tPlayer.iHP << " / " << tPlayer.iHPMax << "\t마나 : " << tPlayer.iMP << " / " << tPlayer.iMPMax<<endl;
+					cout << "보유골드 : " << tPlayer.tInventory.iGold << " Gold" << endl;
+					// 몬스터 정보 출력
+					cout << "======================= 몬스터 =========================" << endl;
+					cout << "이름 : " << tMonster.strName<< endl;
+					cout << "레벨 : " << tMonster.iLevel << "\t경험치 : " << tMonster.iExp << endl;
+					cout << "공격력 : " << tMonster.iAttackMin << " - " << tMonster.iAttackMax << "\t방어력 : " << tMonster.iArmorMin << " - " << tMonster.iArmorMax << endl;
+					cout << "체력 : " << tMonster.iHP << " / " << tMonster.iHPMax << "\t마나 : " << tMonster.iMP << " / " << tMonster.iMPMax << endl;
+					cout << "획득 골드 : " << tMonster.iGoldMin << " - " << tMonster.iGoldMax << " Gold"<< endl;
+
+				}
 			}
 			break;
 		case MM_STORE:
