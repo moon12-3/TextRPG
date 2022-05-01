@@ -34,13 +34,44 @@ enum BATTLE {
 	BATTLE_BACK
 };
 
-typedef struct {
-	int iGold;
-}tagInventory;
+enum ITEM_TYPE {
+	IT_NONE,
+	IT_WEAPON,
+	IT_ARMOR,
+	IT_BACK
+};
+
+enum STORE_MENU {
+	SM_NONE,
+	SM_WEAPON,
+	SM_BACK
+};
 
 #define NAME_SIZE	32
+#define ITEM_DESC_LENGTH	512
+#define INVENTORY_MAX	20
+#define STORE_WEAPON_MAX	3
+#define STORE_ARMOR_MAX	3
+#define STORE_WIZARD_MAX	3
 
-typedef struct {
+struct tagInventory {
+	_tagItem tItem[INVENTORY_MAX];
+	int iItemCount;
+	int iGold;
+};
+
+struct _tagItem {
+	char	strName[NAME_SIZE];
+	char	strTypeName[NAME_SIZE];
+	ITEM_TYPE	eType;
+	int iMin;
+	int iMax;
+	int iPrice;
+	int iSell;
+	char strDesc[ITEM_DESC_LENGTH];
+};
+
+struct tagPlayer {
 	char	strName[NAME_SIZE];
 	char	strJobName[NAME_SIZE];
 	JOB		eJob;
@@ -55,10 +86,9 @@ typedef struct {
 	int iExp;
 	int iLevel;
 	tagInventory	tInventory;
+};
 
-}tagPlayer;
-
-typedef struct {
+struct tagMonster{
 	char	strName[NAME_SIZE];
 	int iAttackMin;
 	int iAttackMax;
@@ -72,7 +102,7 @@ typedef struct {
 	int iExp;
 	int iGoldMin;
 	int iGoldMax;
-}tagMonster;
+};
 
 
 
@@ -192,6 +222,13 @@ int main() {
 	tMonsterArr[2].iExp = 30000;
 	tMonsterArr[2].iGoldMin = 20000;
 	tMonsterArr[2].iGoldMax = 50000;
+
+	// 상점에서 판매할 아이템 목록을 생성한다.
+	_tagItem	tStoreWeapon[STORE_WEAPON_MAX] = {};
+	_tagItem	tStoreArmor[STORE_ARMOR_MAX] = {};
+
+	// 각 아이템 정보들을 설정해준다.
+
 
 	// 메인 로비
 	while (true) {
@@ -347,6 +384,35 @@ int main() {
 			}
 			break;
 		case MM_STORE:
+			while (true)
+			{
+				system("cls");
+				cout << "******************* 상점 ************************";
+				cout << "1. 무기상점" << endl;
+				cout << "2. 방어구상점" << endl;
+				cout << "3. 뒤로가기" << endl;
+				cout << "상점을 선택하세요  : " << endl;
+				cin >> iMenu;
+
+				if (cin.fail()) {
+					cin.clear();
+					cin.ignore(1024, '\n');
+					continue;
+				}
+				else if (iMenu == SM_BACK)
+					break;
+				switch (iMenu) {
+				case SM_WEAPON :
+					while (true) {
+						system("cls");
+
+						cout << "******************* 무기상점 ************************" << endl;
+					}
+					break;
+				case SM_ARMOR :
+					break;
+				}
+			}
 			break;
 		case MM_INVENTORY:
 			break;
